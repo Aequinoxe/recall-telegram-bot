@@ -4,7 +4,8 @@ import java.time.Instant;
 
 public class Card {
     private final long id;
-    private Long deckId;
+    private long deckId;
+
     private String front;
     private String back;
 
@@ -15,27 +16,30 @@ public class Card {
     private int intervalDays;
 
     // The number of times the card has been reviewed.
-    private int repetitions;  //
+    private int repetitions;
+
+    public enum CardState {
+        NEW,
+        LEARNING,
+        REVIEW,
+        RELEARNING
+    }
+
+    private CardState state;
 
     public Card(long id, long deckId, String front, String back) {
         this.id = id;
         this.deckId = deckId;
         this.front = front;
         this.back = back;
-    }
-
-    public Card(long id, String front, String back) {
-        this.id = id;
-        this.deckId = null;
-        this.front = front;
-        this.back = back;
+        this.state = CardState.NEW;
     }
 
     public long getId() {
         return id;
     }
 
-    public Long getDeckId() {
+    public long getDeckId() {
         return deckId;
     }
 
@@ -59,7 +63,11 @@ public class Card {
         return repetitions;
     }
 
-    public void setDeckId(Long deckId) {
+    public CardState getCardState() {
+        return state;
+    }
+
+    public void setDeckId(long deckId) {
         this.deckId = deckId;
     }
 
@@ -81,5 +89,9 @@ public class Card {
 
     public void setRepetitions(int repetitions) {
         this.repetitions = repetitions;
+    }
+
+    public void setCardState(CardState cardState) {
+        this.state = cardState;
     }
 }
