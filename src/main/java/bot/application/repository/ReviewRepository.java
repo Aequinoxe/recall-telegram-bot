@@ -4,5 +4,5 @@ import bot.domain.Review;
 
 public interface ReviewRepository {
 
-    Review save(Review review);
+    void save(Review review);
 }
