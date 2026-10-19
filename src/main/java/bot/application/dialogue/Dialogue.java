@@ -7,14 +7,12 @@ import bot.domain.Deck;
 import bot.domain.Review;
 import java.time.Instant;
 import java.util.List;
-import java.util.Scanner;
 import java.util.function.LongSupplier;
 
 public class Dialogue {
     private final Deck deck;
     private final CardRepository cardRepository;
     private final ReviewRepository reviewRepository;
-    private final Scanner scanner;
     private final LongSupplier reviewIdGenerator;
     private final List<Card> cards;
     private DialogueState currentState =
@@ -33,13 +31,12 @@ public class Dialogue {
             Deck deck,
             CardRepository cardRepository,
             ReviewRepository reviewRepository,
-            Scanner scanner,
             LongSupplier reviewIdGenerator
     ) {
         this.deck = deck;
         this.cardRepository = cardRepository;
         this.reviewRepository = reviewRepository;
-        this.scanner = scanner;
+
         this.reviewIdGenerator = reviewIdGenerator;
 
         this.cards = cardRepository.findByDeckId(deck.getId());
@@ -48,7 +45,6 @@ public class Dialogue {
     public void start() {
         if (currentState != DialogueState.NOT_STARTED) {
             throw new IllegalStateException("Сессия уже началась");
-        }
         System.out.println("Добро пожаловать в Recall Bot!");
         help();
         toNextCard();
