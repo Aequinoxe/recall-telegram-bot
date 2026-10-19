@@ -22,6 +22,13 @@ public class Dialogue {
     private Card currentCard;
     private int currentCardIndex = 0;
 
+    private enum DialogueState {
+        NOT_STARTED,
+        WAITING_FOR_FLIP,
+        WAITING_FOR_GRADE,
+        FINISHED
+    }
+
     public Dialogue(
             Deck deck,
             CardRepository cardRepository,
