@@ -45,23 +45,9 @@ public class Dialogue {
     public void start() {
         if (currentState != DialogueState.NOT_STARTED) {
             throw new IllegalStateException("Сессия уже началась");
-        System.out.println("Добро пожаловать в Recall Bot!");
-        help();
-        toNextCard();
-    }
+        }
 
-    public void help() {
-        System.out.println("""
-                Правила тренировки:
-                1. Прочитайте английское слово.
-                2. Попробуйте вспомнить перевод.
-                3. Нажмите Enter, чтобы открыть ответ.
-                4. Оцените свой ответ:
-                   1 — AGAIN
-                   2 — HARD
-                   3 — GOOD
-                   4 — EASY
-                """);
+        toNextCard();
     }
 
     public void flipCard() {
