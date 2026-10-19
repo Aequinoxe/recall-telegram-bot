@@ -7,6 +7,7 @@ import bot.domain.Deck;
 import bot.domain.Review;
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.LongSupplier;
 
 public class Dialogue {
@@ -42,12 +43,12 @@ public class Dialogue {
         this.cards = cardRepository.findByDeckId(deck.getId());
     }
 
-    public void start() {
+    public Optional<Card> start() {
         if (currentState != DialogueState.NOT_STARTED) {
             throw new IllegalStateException("Сессия уже началась");
         }
 
-        toNextCard();
+        return toNextCard();
     }
 
     public void flipCard() {
@@ -69,7 +70,7 @@ public class Dialogue {
                 """);
     }
 
-    public void processGrade(Review.ReviewResult result) {
+    public Optional<Card> processGrade(Review.ReviewResult result) {
         if (currentState != DialogueState.WAITING_FOR_GRADE) {
             throw new IllegalStateException("Сначала необходимо открыть ответ");
         }
@@ -84,21 +85,20 @@ public class Dialogue {
                 Instant.now()
         );
         reviewRepository.save(review);
-        toNextCard();
+        return toNextCard();
     }
 
-    private void toNextCard() {
+    private Optional<Card> toNextCard() {
         if (currentCardIndex >= cards.size()) {
             currentCard = null;
             currentState = DialogueState.FINISHED;
-            System.out.println("Тренировка завершена!");
-            return;
+            return Optional.empty();
         }
+
         currentCard = cards.get(currentCardIndex);
         currentCardIndex++;
         currentState = DialogueState.WAITING_FOR_FLIP;
-        System.out.println("Карточка " + currentCardIndex + " из " + cards.size());
-        System.out.println("Слово: " + currentCard.getFront());
-        System.out.println("Нажмите Enter, чтобы открыть ответ.");
+
+        return Optional.of(currentCard);
     }
 }
