@@ -51,23 +51,15 @@ public class Dialogue {
         return toNextCard();
     }
 
-    public void flipCard() {
+    public String flipCard() {
         if (currentState != DialogueState.WAITING_FOR_FLIP) {
-            throw new IllegalStateException("Сейчас нельзя перевернуть карточку");
+            throw new IllegalStateException(
+                    "Сейчас нельзя перевернуть карточку"
+            );
         }
-        System.out.println("Перевод: " + currentCard.getBack());
-        currentState = DialogueState.WAITING_FOR_GRADE;
-        showGradeOptions();
-    }
 
-    private void showGradeOptions() {
-        System.out.println("""
-                Оцените, насколько хорошо вы вспомнили ответ:
-                1 — AGAIN
-                2 — HARD
-                3 — GOOD
-                4 — EASY
-                """);
+        currentState = DialogueState.WAITING_FOR_GRADE;
+        return currentCard.getBack();
     }
 
     public Optional<Card> processGrade(Review.ReviewResult result) {
