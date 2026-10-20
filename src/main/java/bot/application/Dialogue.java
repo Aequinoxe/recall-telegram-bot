@@ -1,4 +1,4 @@
-package bot.application.dialogue;
+package bot.application;
 
 import bot.application.repository.CardRepository;
 import bot.application.repository.ReviewRepository;
