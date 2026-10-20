@@ -11,8 +11,6 @@ import java.util.Optional;
 import java.util.function.LongSupplier;
 
 public class Dialogue {
-    private final Deck deck;
-    private final CardRepository cardRepository;
     private final ReviewRepository reviewRepository;
     private final LongSupplier reviewIdGenerator;
     private final List<Card> cards;
@@ -34,8 +32,6 @@ public class Dialogue {
             ReviewRepository reviewRepository,
             LongSupplier reviewIdGenerator
     ) {
-        this.deck = deck;
-        this.cardRepository = cardRepository;
         this.reviewRepository = reviewRepository;
 
         this.reviewIdGenerator = reviewIdGenerator;
