@@ -39,7 +39,7 @@ final public class ConsoleMessages {
         """;
 
     static final String UNKNOWN_COMMAND =
-            "Неизвестная команда. Введи /help для вызова списка доступных команд.";
+            "Неизвестная команда. Введи /help для вызова списка доступных команд. Или /continue, чтобы продолжить тренировку, если она уже начата.";
 
     static final String HELP = """
         Правила тренировки:
@@ -49,24 +49,25 @@ final public class ConsoleMessages {
         3. Нажмите Enter, чтобы открыть ответ.
         4. Оцените свой ответ:
            
-           AGAIN — не удалось вспомнить.
-           HARD — вспомнил с трудом.
-           GOOD — вспомнил.
-           EASY — вспомнил легко.
+           1/AGAIN — не удалось вспомнить.
+           2/HARD — вспомнил с трудом.
+           3/GOOD — вспомнил.
+           4/EASY — вспомнил легко.
 
         Команды:
         /start — начать тренировку.
         /help — показать эту справку.
         /exit — завершить работу.
+        /continue - продолжить работу.
         """;
 
     static final String GRADE_OPTIONS = """
         Оцените, насколько хорошо вы вспомнили ответ:
 
-        AGAIN — не удалось вспомнить.
-        HARD — вспомнил с трудом.
-        GOOD — вспомнил.
-        EASY — вспомнил легко.
+        1 или AGAIN — не удалось вспомнить.
+        2 или HARD — вспомнил с трудом.
+        3 или GOOD — вспомнил.
+        4 или EASY — вспомнил легко.
         """;
 
     static final String TRAINING_FINISHED =
@@ -74,7 +75,7 @@ final public class ConsoleMessages {
 
     static final String INVALID_ACTION = """ 
                     Сейчас это действие недоступно.
-                    Введи /help, чтобы узнать доступные команды.
+                    Введи /help, чтобы узнать доступные команды. Или /continue, чтобы продолжить тренировку, если она уже начата.
                     """;
 
     static final String NO_CARDS =

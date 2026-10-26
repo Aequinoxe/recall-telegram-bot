@@ -28,6 +28,14 @@ public class Card {
     private CardState state;
 
     public Card(long id, long deckId, String front, String back) {
+        //card cannot be empty
+        if (front == null || front.isBlank()) {
+            throw new IllegalArgumentException("Front text cannot be empty");
+        }
+        if (back == null || back.isBlank()) {
+            throw new IllegalArgumentException("Back text cannot be empty");
+        }
+
         this.id = id;
         this.deckId = deckId;
         this.front = front;
