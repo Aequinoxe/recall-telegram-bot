@@ -39,7 +39,7 @@ final public class ConsoleMessages {
         """;
 
     static final String UNKNOWN_COMMAND =
-            "Неизвестная команда. Введи /help для вызова списка доступных команд. Или /continue, чтобы продолжить тренировку, если она уже начата.";
+            "Неизвестная команда. Введи /help для вызова списка доступных команд.";
 
     static final String HELP = """
         Правила тренировки:
@@ -75,7 +75,7 @@ final public class ConsoleMessages {
 
     static final String INVALID_ACTION = """ 
                     Сейчас это действие недоступно.
-                    Введи /help, чтобы узнать доступные команды. Или /continue, чтобы продолжить тренировку, если она уже начата.
+                    Введи /help, чтобы узнать доступные команды.
                     """;
 
     static final String NO_CARDS =
