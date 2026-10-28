@@ -13,10 +13,6 @@ public class Console {
     private final Dialogue dialogue;
     private final Scanner scanner = new Scanner(System.in);
 
-    private Optional<Card> currentCard = Optional.empty();
-    private boolean isFlipped = false;
-    private String currentAnswer = "";
-
     public Console(Dialogue dialogue) {
         this.dialogue = dialogue;
     }
@@ -26,12 +22,9 @@ public class Console {
         System.out.println("Нажмите Enter, чтобы открыть ответ.");
     }
 
-    private void showNextCard(Optional<Card> card) {
-        currentCard = card;
-        isFlipped = false;
-        currentAnswer = "";
-        if (card.isPresent()) {
-            showCard(card.get());
+    private void showNextCard(Optional<Card> cardOpt) {
+        if (cardOpt.isPresent()) {
+            showCard(cardOpt.get());
         } else {
             System.out.println(ConsoleMessages.TRAINING_FINISHED);
         }
@@ -53,15 +46,23 @@ public class Console {
 
             try {
                 switch (command) {
-                    case "/help" -> System.out.println(ConsoleMessages.HELP);
+                    case "/help" -> {
+                        System.out.println(ConsoleMessages.HELP);
+                        if (dialogue.isActive()) {
+                            System.out.println("Нажмите /continue для возвращения к карточке.");
+                        }
+                    }
 
                     case "/continue" -> {
-                        if (currentCard.isPresent()) {
-                            if (!isFlipped) {
-                                showCard(currentCard.get());
+                        if (dialogue.isActive()) {
+                            // Консоль не хранит состояние, она просто запрашивает у диалога текущую карточку
+                            Card card = dialogue.getCurrentCard().orElseThrow(IllegalStateException::new);
+
+                            if (dialogue.getCurrentState() == Dialogue.DialogueState.WAITING_FOR_FLIP) {
+                                showCard(card);
                             } else {
-                                System.out.println("Слово: " + currentCard.get().getFront());
-                                System.out.println("Перевод: " + currentAnswer);
+                                System.out.println("Слово: " + card.getFront());
+                                System.out.println("Перевод: " + card.getBack());
                                 System.out.println(ConsoleMessages.GRADE_OPTIONS);
                             }
                         } else {
@@ -71,10 +72,6 @@ public class Console {
 
                     case "/start" -> {
                         Optional<Card> firstCard = dialogue.start();
-                        currentCard = firstCard;
-                        isFlipped = false;
-                        currentAnswer = "";
-
                         if (firstCard.isPresent()) {
                             showCard(firstCard.get());
                         } else {
@@ -83,14 +80,14 @@ public class Console {
                     }
 
                     case "" -> {
-                        if (!isFlipped) {
-                            // Если перевод ещё не открыт — открываем его
-                            currentAnswer = dialogue.flipCard();
-                            isFlipped = true;
-                            System.out.println("Перевод: " + currentAnswer);
+                        if (dialogue.getCurrentState() == Dialogue.DialogueState.WAITING_FOR_FLIP) {
+                            String answer = dialogue.flipCard();
+                            System.out.println("Перевод: " + answer);
+                            System.out.println(ConsoleMessages.GRADE_OPTIONS);
+                        } else if (dialogue.getCurrentState() == Dialogue.DialogueState.WAITING_FOR_GRADE) {
                             System.out.println(ConsoleMessages.GRADE_OPTIONS);
                         } else {
-                            System.out.println(ConsoleMessages.GRADE_OPTIONS);
+                            System.out.println(ConsoleMessages.INVALID_ACTION);
                         }
                     }
 
