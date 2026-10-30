@@ -19,11 +19,13 @@ public class Dialogue {
     private Card currentCard;
     private int currentCardIndex = 0;
 
-    private enum DialogueState {
+    public enum DialogueState {
         NOT_STARTED,
         WAITING_FOR_FLIP,
         WAITING_FOR_GRADE,
         FINISHED
+
+
     }
 
     public Dialogue(
@@ -37,6 +39,18 @@ public class Dialogue {
         this.reviewIdGenerator = reviewIdGenerator;
 
         this.cards = cardRepository.findByDeckId(deck.getId());
+    }
+
+    public boolean isActive() {
+        return currentState == DialogueState.WAITING_FOR_FLIP || currentState == DialogueState.WAITING_FOR_GRADE;
+    }
+
+    public DialogueState getCurrentState() {
+        return currentState;
+    }
+
+    public Optional<Card> getCurrentCard() {
+        return Optional.ofNullable(currentCard);
     }
 
     public Optional<Card> start() {
