@@ -8,6 +8,10 @@ import bot.domain.Deck;
 import bot.infrastructure.repository.InMemoryCardRepository;
 import bot.infrastructure.repository.InMemoryReviewRepository;
 import bot.presentation.console.Console;
+import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import bot.presentation.telegram.TelegramBot;
+import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 import java.util.List;
 
@@ -34,14 +38,35 @@ public class RecallBotApplication {
 
         IdGenerator idGenerator = new IdGenerator();
 
-        Dialogue dialogue = new Dialogue(
-                deck,
-                cardRepository,
-                reviewRepository,
-                idGenerator::getNextId
-        );
+        if (args.length > 0 && args[0].equalsIgnoreCase("console")) {
+            Dialogue dialogue = new Dialogue(
+                    deck,
+                    cardRepository,
+                    reviewRepository,
+                    idGenerator::getNextId
+            );
 
-        Console console = new Console(dialogue);
-        console.run();
-    }
+            Console console = new Console(dialogue);
+            console.run();
+        } else {
+            ManagerDialogue managerDialogue = new ManagerDialogue(
+                    deck,
+                    cardRepository,
+                    reviewRepository,
+                    idGenerator::getNextId
+            );
+            // потом задать тут токен
+            String botToken = System.getenv().getOrDefault("BOT_TOKEN", "YOUR_BOT_TOKEN_HERE");
+            String botUsername = System.getenv().getOrDefault("BOT_USERNAME", "YOUR_BOT_USERNAME_HERE");
+
+            try {
+                TelegramBotsApi botsApi =
+                        new TelegramBotsApi(DefaultBotSession.class);
+                botsApi.registerBot(new TelegramBot(botToken, botUsername, managerDialogue));
+                System.out.println("Telegram-бот успешно запущен!");
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        }
 }
